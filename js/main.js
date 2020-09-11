@@ -6,7 +6,7 @@ getLocalStorage();
 getEle("btnThem").addEventListener("click", function () {
     getEle("btnCapNhat").style.display = "none";
     getEle("btnThemNV").style.display = "block";
-
+    getEle("msnv").removeAttribute("disabled");
 })
 
 /**
@@ -21,12 +21,23 @@ getEle("btnThemNV").addEventListener("click", function () {
     var date = getEle("datepicker").value;
     var chucVu = getEle("chucvu").value;
 
-    var isValid = true;
+    var isValid = isValidation(maNV, tenNV, email, password, date, chucVu);
+    isValid &= validation.kiemTraTrung(maNV, "tbMaNV", "(*) manv da ton tai!", dsnv.arr);
+    if (!isValid) return;
 
+    var nhanVien = new NhanVien(maNV, tenNV, email, password, date, chucVu);
+    dsnv.themNhanVien(nhanVien);
+    taoBang(dsnv.arr);
+    setLocalStorage();
+    getEle("btnDong").click();
+})
+
+//kiểm tra validation cuả form
+function isValidation(maNV, tenNV, email, password, date, chucVu) {
+    var isValid = true;
     isValid &=
         validation.kiemTraRong(maNV, "tbMaNV", "(*) Manv k dc rong!") &&
-        validation.kiemTraDoDaiKyTu(maNV, "tbMaNV", "(*) Do dai ky tu 4 - 10", 4, 10) &&
-        validation.kiemTraTrung(maNV, "tbMaNV", "(*) manv da ton tai!", dsnv.arr);
+        validation.kiemTraDoDaiKyTu(maNV, "tbMaNV", "(*) Do dai ky tu 4 - 10", 4, 10);
 
     isValid &=
         validation.kiemTraRong(tenNV, "tbTen", "(*) Tên NV k dc rong!") &&
@@ -45,14 +56,8 @@ getEle("btnThemNV").addEventListener("click", function () {
     isValid &= 
         validation.kiemTraChucVu("chucvu", "tbChucVu", "(*) Vui lòng chọn chức vụ");
 
-    if (!isValid) return;
-
-    var nhanVien = new NhanVien(maNV, tenNV, email, password, date, chucVu);
-    dsnv.themNhanVien(nhanVien);
-    taoBang(dsnv.arr);
-    setLocalStorage();
-    getEle("btnDong").click();
-})
+    return isValid;
+}
 
 function taoBang(arr) {
     var contentHTML = "";
@@ -79,6 +84,46 @@ function xoaNhanVien(maNV) {
     taoBang(dsnv.arr);
     setLocalStorage();
 }
+
+/**
+ * Sửa nhân viên
+ */
+function suaNhanVien(maNV){
+    getEle("btnCapNhat").style.display = "block";
+    getEle("btnThemNV").style.display = "none";
+
+    var NhanVien = dsnv.layThongTinNhanVien(maNV);
+
+    getEle("msnv").value = NhanVien.maNV;
+    getEle("msnv").setAttribute("disabled", true);
+    getEle("name").value = NhanVien.tenNV;
+    getEle("email").value = NhanVien.email;
+    getEle("password").value = NhanVien.password;
+    getEle("datepicker").value = NhanVien.date;
+    getEle("chucvu").value = NhanVien.chucVu;
+}
+/**
+ * cập nhật nhân viên
+ */
+getEle("btnCapNhat").addEventListener("click", function () {
+    var maNV = getEle("msnv").value;
+    var tenNV = getEle("name").value;
+    var email = getEle("email").value;
+    var password  = getEle("password").value;
+    var date = getEle("datepicker").value;
+    var chucVu = getEle("chucvu").value;
+
+    var isValid = isValidation(maNV, tenNV, email, password, date, chucVu);
+    if (!isValid) return;
+    
+
+    var nhanVien = new NhanVien(maNV, tenNV, email, password, date, chucVu);
+    dsnv.capNhatNhanVien(nhanVien);
+    taoBang(dsnv.arr);
+    setLocalStorage();
+    getEle("btnDong").click();
+});
+
 
 
 /**

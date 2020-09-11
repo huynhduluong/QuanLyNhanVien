@@ -16,5 +16,18 @@ function DanhSachNhanVien() {
         if(index !== -1){
             this.arr.splice(index, 1);
         };        
+    };
+
+    this.layThongTinNhanVien = function (maNV) {
+        return this.arr.find(function (item) {
+            return item.maNV === maNV;
+        })
+    };
+
+    this.capNhatNhanVien = function (nhanVien) {
+        var index = this.timViTri(nhanVien.maNV);
+        if (index !== -1) {
+            this.arr[index] = nhanVien;
+        }
     }
 }
