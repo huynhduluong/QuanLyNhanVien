@@ -29,5 +29,11 @@ function DanhSachNhanVien() {
         if (index !== -1) {
             this.arr[index] = nhanVien;
         }
-    }
+    };
+}
+
+DanhSachNhanVien.prototype.timKiemNhanVien = function (keyword){
+    return this.arr.filter(function (item) {
+        return item.tenNV.toLowerCase().indexOf(keyword.toLowerCase()) !== -1;
+    })
 }

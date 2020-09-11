@@ -124,6 +124,11 @@ getEle("btnCapNhat").addEventListener("click", function () {
     getEle("btnDong").click();
 });
 
+getEle("searchName").addEventListener("keyup", function () {
+    var keyword = getEle("searchName").value;
+    var mangTimKiem = dsnv.timKiemNhanVien(keyword);
+    taoBang(mangTimKiem);
+})
 
 
 /**
