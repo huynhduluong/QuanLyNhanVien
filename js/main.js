@@ -1,6 +1,7 @@
 var dsnv = new DanhSachNhanVien();
 var validation = new Validation();
 
+getLocalStorage();
 
 getEle("btnThem").addEventListener("click", function () {
     getEle("btnCapNhat").style.display = "none";
@@ -49,6 +50,8 @@ getEle("btnThemNV").addEventListener("click", function () {
     var nhanVien = new NhanVien(maNV, tenNV, email, password, date, chucVu);
     dsnv.themNhanVien(nhanVien);
     taoBang(dsnv.arr);
+    setLocalStorage();
+    getEle("btnDong").click();
 })
 
 function taoBang(arr) {
@@ -74,10 +77,33 @@ function taoBang(arr) {
 function xoaNhanVien(maNV) {
     dsnv.xoaNhanVien(maNV);
     taoBang(dsnv.arr);
+    setLocalStorage();
 }
 
 
-
+/**
+ * Lưu mảng dsnv.arr xuống LocalStorage
+ * Chuyển data thành kiểu string
+ */
+function setLocalStorage() {
+    localStorage.setItem("DSNV", JSON.stringify(dsnv.arr));
+    
+  }
+  
+  /**
+   * lấy mảng dsnv.arr từ LocalStorage
+   * Chuyển qua kiểu JSON
+   */
+  function getLocalStorage() {
+    if (localStorage.getItem("DSNV")) {
+      //Lấy mảng từ LocalStorage gán vào biến arr
+      var arr = localStorage.getItem("DSNV");
+      
+      //Chuyển arr thành kiểu JSON sau đó gán vào dsnv.arr
+      dsnv.arr = JSON.parse(arr);
+      taoBang(dsnv.arr);
+    }
+  }
 
 
 function getEle(id) {
