@@ -48,10 +48,33 @@ getEle("btnThemNV").addEventListener("click", function () {
 
     var nhanVien = new NhanVien(maNV, tenNV, email, password, date, chucVu);
     dsnv.themNhanVien(nhanVien);
+    taoBang(dsnv.arr);
 })
 
+function taoBang(arr) {
+    var contentHTML = "";
+    arr.forEach(function (item) {
+        contentHTML += `
+            <tr>
+                <td>${item.maNV}</td>
+                <td>${item.tenNV}</td>
+                <td>${item.email}</td>
+                <td>${item.date}</td>
+                <td>${item.chucVu}</td>
+                <td>
+                    <button class="btn btn-info" data-toggle="modal" data-target="#myModal" onclick="suaNhanVien('${item.maNV}')">Edit</button>
+                    <button class="btn btn-danger" onclick="xoaNhanVien('${item.maNV}')">Delete</button>
+                </td>
+            </tr>
+        `;
+    });
+    getEle("tableDanhSach").innerHTML = contentHTML;
+}
 
-
+function xoaNhanVien(maNV) {
+    dsnv.xoaNhanVien(maNV);
+    taoBang(dsnv.arr);
+}
 
 
 
